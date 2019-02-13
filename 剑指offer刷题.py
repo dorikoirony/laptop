@@ -1,3 +1,6 @@
+#剑指offer刷题
+
+
 
 #1.在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
 #思路：右上角开始，比输入值小，则j+1，比输入值大，则i-1，len(array)为行数，len(array[0])为列数
@@ -650,3 +653,150 @@ class Solution:
             if  a.right:
                 list1.append(a.right)
         return list
+		
+		
+#23.输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)
+#思路：按照dfs的传统做法，需要一个辅助列表来完成，找到后，删除最后的节点，往上寻找，一直到顶端
+#方法：
+#这是DFS
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def __init__(self):
+        self.a = []
+        self.b = []
+    def FindPath(self, root, expectNumber):
+        if root is None:
+            return []
+        self.a.append(root.val)      #用于存储当前路径
+        expectNumber -= root.val     #自减
+        if expectNumber == 0 and root.left == None and root.right == None:      #该路径符合值且该节点为最底端时，这条路是对的
+            self.b.append(self.a[:])											#输出该路径
+        self.FindPath(root.left, expectNumber)
+        self.FindPath(root.right, expectNumber)
+        self.a.pop()															#返回上一层节点
+		sorted(self.b,key=len,reverse=True)										#sorted函数实现b内部按长度排序，并反转，实现长的在前
+        return self.b
+		
+		
+#24.输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+#思路：先不管random，每个节点复制，并插入到原节点后面，完成next指针复制，在实现random复制，再把复制的链表拆出来并返回头即可
+#方法：
+#不知为何错误：
+# -*- coding:utf-8 -*-
+# class RandomListNode:
+#     def __init__(self, x):
+#         self.label = x
+#         self.next = None
+#         self.random = None
+class Solution:
+    # 返回 RandomListNode
+    def Clone(self, pHead):
+        # write code here
+        head0=pHead
+        if not head0: 
+            return 
+        while head0:
+            new1=RandomListNode(head0.label)   #新建一个节点，使用当前遍历到的节点再RandomListNode里新建
+            new1.next=head0.next
+            head0.next=new1
+            head0=new1.next
+        head0=pHead
+        while head0:
+            if head0.random:
+                head0.next.random=head0.random.next
+            head0=head0.next.next
+        head0=pHead
+        head1=pHead.next
+        while head0.next.next:
+            node0=head0.next
+            node1=node0.next
+            head0.next=node1
+            node0.next=node1.next
+            head0=node1
+        return head1
+
+#正确：
+class Solution:
+    # 返回 RandomListNode
+    def Clone(self, pHead):
+        # write code here
+        head0=pHead
+        if not head0: 
+            return 
+        while head0:
+            new1=RandomListNode(head0.label)
+            new1.next=head0.next
+            head0.next=new1
+            head0=new1.next
+        head0=pHead
+        while head0:
+            if head0.random:
+                head0.next.random=head0.random.next
+            head0=head0.next.next
+        head0=pHead
+        head1=pHead.next
+        while head0:
+			node0=head0.next
+			node1=node0.next
+			head0.next=node1
+			if node1:
+				node0.next=node1.next
+			else:
+				node0.next=None
+			head0=node1
+        return head1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#leetcode刷题
+#1.给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+#暴力解法：两个遍历搞定（时间复杂度太高）
+class Solution:
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        b=[]
+        for i in range(len(nums)):
+            for j in range(i+1,len(nums)):
+                if nums[i]+nums[j]==target:
+                    b.append(i)
+                    b.append(j)
+                    return b
