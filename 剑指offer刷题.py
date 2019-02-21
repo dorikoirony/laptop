@@ -752,19 +752,48 @@ class Solution:
         return head1
 
 
+#25.输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+#思路：二叉排序左<根<右，和中序一致，先获取中序遍历列表，再在列表内实现指针建立及移动
+#方法：这种似乎是O(n)空间复杂度，使用morris算法，可以实现O(1)空间复杂度
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def Convert(self, pRootOfTree):
+        # write code here
+        if not pRootOfTree:
+            return
+        if not pRootOfTree.left and not pRootOfTree.right:
+            return pRootOfTree
+        left=self.Convert(pRootOfTree.left)
+        Root=left
+        while left and Root.right:
+            Root=Root.right
+        if left:
+            Root.right=pRootOfTree
+            pRootOfTree.left=Root
+        right=self.Convert(pRootOfTree.right)
+        if right:
+            right.left = pRootOfTree
+            pRootOfTree.right = right
+        return left if left else pRootOfTree
 
 
 
 
 
+#26.输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+#思路：
+#方法：
 
 
 
 
 
-
-
-
+ 
 
 
 
